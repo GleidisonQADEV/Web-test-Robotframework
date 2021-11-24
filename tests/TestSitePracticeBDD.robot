@@ -19,7 +19,7 @@ Cenário 03: Listar produtos
     Dado que estou na página home do site
     Quando passar o mouse por cima da categoria "Women" no menu principal superior de categorias
     E clicar na sub categoria "Summer Dresses"
-    Então uma página com os produtos da categoria selecionada deve ser exibida
+    Então uma página com os produtos da sub categoria "Summer Dresses" selecionada deve ser exibida
 
 Cenário 04: Adicionar produtos no carrinho
     Dado que estou na página home do site
@@ -33,9 +33,10 @@ Cenário 05: Remover produtos do carrinho
      Quando excluir o produto do carrinho
      Então a página deve exibir a mensagem "Your shopping cart is empty."
 
-#Cenário 06: Adicionar cliente
-    #Quando faço o cadastro novo de cliente
-    #Então a página de gerenciamento da conta deve ser exibida
+Cenário 06: Adicionar cliente
+    Dado que estou na página home do site
+    Quando faço o cadastro novo de cliente
+    Então a página de gerenciamento da conta deve ser exibida
 
 *** Keywords ***
 Dado que estou na página home do site
@@ -57,9 +58,8 @@ Quando passar o mouse por cima da categoria "${GENERO}" no menu principal superi
 E clicar na sub categoria "${SUB_CATEGORIA}"
     Clicar no botão "${SUB_CATEGORIA}"
 
-Então uma página com os produtos da categoria selecionada deve ser exibida
-    Conferir se os produtos são exibidos na página
-    Conferir se os produtos são exibidos na página
+Então uma página com os produtos da sub categoria ${SUB_CATEGORIA} selecionada deve ser exibida
+    Conferir se os produtos da sub categoria ${SUB_CATEGORIA} são exibidos na página
 
 Quando pesquiar pelo produto "${PRODUTO}" no campo de pesquisa
     Digitar o nome do produto "${PRODUTO}" no campo de pesquisa
@@ -81,11 +81,13 @@ Quando excluir o produto do carrinho
     Clicar no carrinho de compras
     Escluir produto do carrinho
 
-
 Quando faço o cadastro novo de cliente
     Clicar no botão "Sign in"
     Inserir e-mail válido
     Clicar no botão "Create na account"
     Conferir a pagina de cadastro de cliente
     Preencher os campos obrigatórios
+
+Então a página de gerenciamento da conta deve ser exibida
+    Conferir a pagina de gerenciamento
 ###

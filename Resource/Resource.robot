@@ -5,6 +5,8 @@ library   String
 *** variables ***
 ${BROWSER}     chrome
 ${URL}         http://automationpractice.com
+&{PESSOA}      nome=Gleidison    sobrenome=Nascimento    senha=123456    endereço=Rua Framework, Bairro Robot    cidade=Florianópolis   estado=9    caixapostal=12345    telefone=999999999
+@{PRODUTOS}    Printed Summer Dress   Printed Chiffon Dress
 
 *** keywords***
 ### Setup e Teardow
@@ -57,9 +59,23 @@ Clicar no botão "Create na account"
     Click Element                    xpath=//*[@id="SubmitCreate"]/span
 
 Preencher os campos obrigatórios
-    Wait Until Element Is Visible    xpath=//*[@id="account-creation_form"]/div[1]/h3
-    Input Text                       id=customer_firstname    Conta
 
+    Wait Until Element Is Visible   xpath=//*[@id="account-creation_form"]//h3[contains(text(),"Your personal information")]
+    Click Element                   id=id_gender2
+    Input Text                      id=customer_firstname    ${PESSOA.nome}
+    Input Text                      id=customer_lastname     ${PESSOA.sobrenome}
+    Input Text                      id=passwd                ${PESSOA.senha}
+    Input Text                      id=address1              ${PESSOA.endereço}
+    Input Text                      id=city                  ${PESSOA.cidade}
+    Set Focus To Element            id=id_state
+
+### No firefox ocorreu problema ao achar o listbox State, então coloquei um if para esperar
+### pelo elemento quando for firefox
+### Run Keyword If    '${BROWSER}'=='firefox'  Wait Until Element Is Visible   id=id_state
+    Select From List By Index       id=id_state              ${PESSOA.estado}
+    Input Text                      id=postcode              ${PESSOA.caixapostal}
+    Input Text                      id=phone_mobile          ${PESSOA.telefone}
+    Click Element                   xpath= //*[@id="submitAccount"]/span
 
 ### Conferências
 Conferir se o produto "${PRODUTO}" foi listado no site
@@ -72,11 +88,12 @@ Conferir mensagem "${MENSAGEM_ALERTA}"
     Wait Until Element Is Visible    xpath=//*[@id="center_column"]/p[@class='alert alert-warning']
     Element Text Should Be           xpath=//*[@id="center_column"]/p[@class='alert alert-warning']    ${MENSAGEM_ALERTA}
 
-Conferir se os produtos são exibidos na página
+Conferir se os produtos da sub categoria ${SUB_CATEGORIA} são exibidos na página
     Wait Until Element Is Visible    css=#center_column > h1 > span.cat-name
-    Page Should Contain Image        xpath=//*[@id="center_column"]/ul/li[1]/div/div[1]/div/a[1]/img
-    Page Should Contain Image        xpath=//*[@id="center_column"]/ul/li[2]/div/div[1]/div/a[1]/img
-    Page Should Contain Image        xpath=//*[@id="center_column"]/ul/li[3]/div/div[1]/div/a[1]/img
+    Page Should Contain Element      xpath=//*[@id="center_column"]/h1/span[contains(text(),"Summer Dresses")]
+    Page Should Contain Element      xpath=//*[@id="center_column"]/ul/li[1]/div/div[2]/h5/a[@title="${PRODUTOS[0]}"]
+    Page Should Contain Element      xpath=//*[@id="center_column"]/ul/li[2]/div/div[2]/h5/a[@title="${PRODUTOS[0]}"]
+    Page Should Contain Element      xpath=//*[@id="center_column"]/ul/li[3]/div/div[2]/h5/a[@title="${PRODUTOS[1]}"]
 
 Conferir se o produto "${PRODUTO}" foi listado na pesquisa
     Wait Until Element Is Visible    css=#center_column > h1
@@ -93,3 +110,8 @@ Conferir a pagina de cadastro de cliente
     Wait Until Element Is Visible    css=#noSlide > h1
     Title Should Be                  Login - My Store
     Page Should Contain              Authentication
+
+Conferir a pagina de gerenciamento
+    Wait Until Element Is Visible    css=#center_column > h1
+    Title Should Be    My account - My Store
+    Page Should Contain    Welcome to your account. Here you can manage all of your personal information and orders.
